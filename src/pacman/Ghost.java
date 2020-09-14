@@ -3,17 +3,13 @@ package pacman;
 public class Ghost{
 	Position position;
 	
-	int ghostDx = -1;
-	int ghostDy = 0;
+	int ghostDx;
+	int ghostDy;
 	
 	public Ghost(Position position, int dx, int dy) {
 		this.position = position;
 		this.ghostDx = dx;
 		this.ghostDy = dy;
-	}
-
-	public boolean at(int x, int y) {
-		return position.getY() == y && position.getX() == x;
 	}
 
 	public void moveNext() {
