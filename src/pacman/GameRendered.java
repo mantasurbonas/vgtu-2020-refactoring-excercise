@@ -8,6 +8,7 @@ public class GameRendered {
 				for (Ghost ghost: gameLevel.getGhosts()) {
 					if (ghost.at(x, y)){
 						System.out.print("W");
+						x++;
 						continue;
 					}
 				}
