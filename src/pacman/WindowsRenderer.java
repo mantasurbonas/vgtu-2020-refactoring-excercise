@@ -3,18 +3,17 @@ package pacman;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 public class WindowsRenderer {
 
-	private BufferedImage ghostImage;
-	private BufferedImage wallImage;
-	private BufferedImage pacmanImage;
+	private final BufferedImage ghostImage;
+	private final BufferedImage wallImage;
+	private final BufferedImage pacmanImage;
 
-	public WindowsRenderer() throws FileNotFoundException, IOException {
+	public WindowsRenderer() throws IOException {
 		pacmanImage = ImageIO.read(new FileInputStream("img/pacman-open.png"));
 		ghostImage = ImageIO.read(new FileInputStream("img/ghost.png"));
 		wallImage = ImageIO.read(new FileInputStream("img/wall.png"));
