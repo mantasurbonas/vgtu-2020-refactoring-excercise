@@ -2,10 +2,8 @@ package pacman;
 
 public class GameRules {
 
-	private GameLevel level;
+	private final GameLevel level;
 
-	private boolean gameOver =false;
-	
 	public GameRules(GameLevel level) {
 		this.level = level;
 	}
@@ -40,17 +38,13 @@ public class GameRules {
 				level.getPacman().setPosition( level.getPacman().getPosition().down());
 			break;
 		case 'q':
-			setGameOver(true);
-			break;
+			System.exit(0);
 		}
 	}
 
 	public void moveGhosts() {
 		for (Ghost ghost: level.getGhosts())
 			moveGhost(ghost);
-		
-		if (isPacmanEaten())
-			gameOver = true;
 	}
 	
 	private void moveGhost(Ghost ghost) {
@@ -60,13 +54,5 @@ public class GameRules {
 		}
 		
 		ghost.moveNext();
-	}
-
-	public boolean isGameOver() {
-		return gameOver;
-	}
-
-	public void setGameOver(boolean gameOver) {
-		this.gameOver = gameOver;
 	}
 }
