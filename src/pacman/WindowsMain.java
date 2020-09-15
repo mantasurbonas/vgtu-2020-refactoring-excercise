@@ -2,11 +2,6 @@ package pacman;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,81 +11,58 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
-public class WindowsMain extends JFrame{
+public class WindowsMain extends JFrame {
 
-	private GameLevel level;
-	private GameRules gameRules;
-	private WindowsRenderer windowsRenderer;
+    private final GameLevel level;
+    private final GameRules gameRules;
+    private final Renderer renderer;
+    private final PlayerInputHandler playerInputHandler;
 
-	public WindowsMain() throws FileNotFoundException, IOException {
-		super.setPreferredSize(new Dimension(1500, 900));
-		super.pack();
-		super.setVisible(true);
-		super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
-		GameMap map = new GameMap();
-		Pacman pacman = new Pacman( new Position(10,10) );
-		List<Ghost> ghosts = new ArrayList<Ghost>();
-			ghosts.add(new Ghost( new Position(15, 13),  -1, 0));
-			ghosts.add(new Ghost( new Position(17, 10),  0,  1));
-			
-		this.level = new GameLevel(map, pacman, ghosts);
-		
-		this.gameRules = new GameRules(level);
+    public WindowsMain() throws IOException {
 
-		this.windowsRenderer = new WindowsRenderer();
-		
-		super.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {}			
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				char command = e.getKeyChar();
-				repaint();
-				
-				gameRules.processUserInput(command);
-			}
-		});
-		
-		new Timer(300, new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				repaint();
-				
-				gameRules.moveGhosts();
-			}
-			
-		}).start();
-	}
-	
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		
-		this.windowsRenderer.render(g, this.level);
-	}
-	
-	public static void main(String[] args) throws Exception {
-		SwingUtilities.invokeAndWait(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					new WindowsMain();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	
-	
-	private static final long serialVersionUID = 1L;
+        super.setPreferredSize(new Dimension(1500, 900));
+        super.pack();
+        super.setVisible(true);
+        super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        super.createBufferStrategy(2);
 
+        GameMap map = new GameMap();
+        Pacman pacman = new Pacman(new Position(10, 10));
+        List<Ghost> ghosts = new ArrayList<>();
+        ghosts.add(new Ghost(new Position(15, 13), new Delta(-1, 0)));
+        ghosts.add(new Ghost(new Position(17, 10), new Delta(0, 1)));
+
+        this.playerInputHandler = new PlayerInputHandler(this);
+        this.level = new GameLevel(map, pacman, ghosts);
+        this.gameRules = new GameRules(level);
+        this.renderer = new WindowsRenderer();
+
+        new Timer(33, e -> {
+            PlayerInput playerInput = this.playerInputHandler.getPlayerInput();
+            if (playerInput != PlayerInput.NONE)
+                repaint();
+            gameRules.processUserInput(playerInput);
+        }).start();
+
+        new Timer(300, e -> {
+            repaint();
+            gameRules.moveGhosts();
+        }).start();
+    }
+
+    @Override
+    public void paint(Graphics graphics) {
+        super.paint(graphics);
+        this.renderer.render(graphics, this.level);
+    }
+
+    public static void main(String[] args) throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                new WindowsMain();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
 }

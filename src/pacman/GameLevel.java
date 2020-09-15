@@ -5,9 +5,7 @@ import java.util.List;
 public class GameLevel {
 
 	private GameMap gameMap;
-	
 	private Pacman pacman;
-	
 	private List<Ghost> ghosts;
 
 	public GameLevel(GameMap map, Pacman pacman, List<Ghost> ghosts) {

@@ -1,39 +1,27 @@
 package pacman;
 
-public class Ghost{
-	Position position;
-	
-	int ghostDx = -1;
-	int ghostDy = 0;
-	
-	public Ghost(Position position, int dx, int dy) {
-		this.position = position;
-		this.ghostDx = dx;
-		this.ghostDy = dy;
-	}
+public class Ghost {
+    private final Position position;
+    private final Delta delta;
 
-	public boolean at(int x, int y) {
-		return position.getY() == y && position.getX() == x;
-	}
+    public Ghost(Position position, Delta delta) {
+        this.position = position;
+        this.delta = delta;
+    }
 
-	public void moveNext() {
-		position.setX(ghostDx + position.getX());
-		position.setY(ghostDy + position.getY());
-	}
+    public void moveNext() {
+        position.apply(delta);
+    }
 
-	public void invertDx() {
-		ghostDx = -1 * ghostDx;		
-	}
+    public void invert() {
+        delta.invert();
+    }
 
-	public void invertDy() {
-		ghostDy = -1 * ghostDy;		
-	}
+    public Position getPosition() {
+        return position;
+    }
 
-	public Position getPosition() {
-		return position;
-	}
-
-	public Position getNext() {
-		return new Position(position).addX(ghostDx).addY(ghostDy);
-	}
-};
+    public Position getNext() {
+        return position.next(delta);
+    }
+}
