@@ -20,9 +20,9 @@ public class WindowsMain extends JFrame{
 
 	private GameLevel level;
 	private GameRules gameRules;
-	private WindowsRenderer windowsRenderer;
+	private Renderer renderer;
 
-	public WindowsMain() throws FileNotFoundException, IOException {
+	public WindowsMain() throws IOException {
 		super.setPreferredSize(new Dimension(1500, 900));
 		super.pack();
 		super.setVisible(true);
@@ -30,7 +30,7 @@ public class WindowsMain extends JFrame{
 		
 		GameMap map = new GameMap();
 		Pacman pacman = new Pacman( new Position(10,10) );
-		List<Ghost> ghosts = new ArrayList<Ghost>();
+		List<Ghost> ghosts = new ArrayList<>();
 			ghosts.add(new Ghost( new Position(15, 13),  -1, 0));
 			ghosts.add(new Ghost( new Position(17, 10),  0,  1));
 			
@@ -38,7 +38,7 @@ public class WindowsMain extends JFrame{
 		
 		this.gameRules = new GameRules(level);
 
-		this.windowsRenderer = new WindowsRenderer();
+		this.renderer = new WindowsRenderer();
 		
 		super.addKeyListener(new KeyListener() {
 			
@@ -57,35 +57,25 @@ public class WindowsMain extends JFrame{
 			}
 		});
 		
-		new Timer(300, new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				repaint();
-				
-				gameRules.moveGhosts();
-			}
-			
+		new Timer(300, e -> {
+			repaint();
+
+			gameRules.moveGhosts();
 		}).start();
 	}
 	
 	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		
-		this.windowsRenderer.render(g, this.level);
+	public void paint(Graphics graphics) {
+		super.paint(graphics);
+		this.renderer.render(graphics, this.level);
 	}
 	
 	public static void main(String[] args) throws Exception {
-		SwingUtilities.invokeAndWait(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					new WindowsMain();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		SwingUtilities.invokeAndWait(() -> {
+			try {
+				new WindowsMain();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
