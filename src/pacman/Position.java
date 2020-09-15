@@ -6,7 +6,7 @@ public class Position {
 	private int y;
 	
 	public Position(int x, int y) {
-		this.x = x;
+		this.setX(x);
 		this.setY(y);
 	}
 	
@@ -33,6 +33,17 @@ public class Position {
 	
 	public boolean equals(Position pos) {
 		return this.x == pos.getX() && this.y == pos.getY();
+	}
+
+	public void apply(Delta delta) {
+		this.setX(delta.getDX() + this.getX());
+		this.setY(delta.getDY() + this.getY());
+	}
+
+	public Position next(Delta delta) {
+		Position next = new Position(this);
+		next.apply(delta);
+		return next;
 	}
 
 	public Position left() {

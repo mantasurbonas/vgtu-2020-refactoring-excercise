@@ -33,18 +33,19 @@ public class WindowsMain extends JFrame {
 		GameMap map = new GameMap();
 		Pacman pacman = new Pacman( new Position(10,10) );
 		List<Ghost> ghosts = new ArrayList<>();
-			ghosts.add(new Ghost( new Position(15, 13),  -1, 0));
-			ghosts.add(new Ghost( new Position(17, 10),  0,  1));
+			ghosts.add(new Ghost( new Position(15, 13),  new Delta(-1, 0)));
+			ghosts.add(new Ghost( new Position(17, 10),  new Delta(0,  1)));
 
 		this.playerInputHandler = new PlayerInputHandler(this);
 		this.level = new GameLevel(map, pacman, ghosts);
 		this.gameRules = new GameRules(level);
 		this.renderer = new WindowsRenderer();
-		
 
-		
-		new Timer(300, e -> {
+		new Timer(33, e -> {
 			repaint();
+
+			PlayerInput playerInput = this.playerInputHandler.getPlayerInput();
+			gameRules.processUserInput(playerInput);
 
 			gameRules.moveGhosts();
 		}).start();

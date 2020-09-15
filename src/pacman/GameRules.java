@@ -9,38 +9,38 @@ public class GameRules {
 	}
 
 	public boolean isPacmanEaten() {
-		boolean result = false;
 		for (Ghost ghost: level.getGhosts())
-			result = result || isPacmanEaten(ghost, level.getPacman());
-		return result;
+			if(isPacmanEaten(ghost, level.getPacman()))
+				return true;
+		return false;
 	}
 	
 	public static boolean isPacmanEaten(Ghost ghost, Pacman pacman) {
 		return ghost.getPosition().equals(pacman.getPosition());
 	}
 
-	public void processUserInput(int key) {
-		switch (key) {
-			case 'q':
-				closeGame();
-				break;
-			case 'a':
-				if (level.getGameMap().isAvailable(level.getPacman().getPosition().left()))
-					level.getPacman().setPosition( level.getPacman().getPosition().left());
-				break;
-			case 'd':
-				if (level.getGameMap().isAvailable(level.getPacman().getPosition().right()))
-					level.getPacman().setPosition( level.getPacman().getPosition().right());
-				break;
-			case 'w':
+	public void processUserInput(PlayerInput playerInput) {
+		switch (playerInput) {
+			case UP:
 				if (level.getGameMap().isAvailable(level.getPacman().getPosition().up()))
-					level.getPacman().setPosition( level.getPacman().getPosition().up());
+					level.getPacman().setPosition(level.getPacman().getPosition().up());
 				break;
-			case 's':
+			case RIGHT:
+				if (level.getGameMap().isAvailable(level.getPacman().getPosition().right()))
+					level.getPacman().setPosition(level.getPacman().getPosition().right());
+				break;
+			case DOWN:
 				if (level.getGameMap().isAvailable(level.getPacman().getPosition().down()))
-					level.getPacman().setPosition( level.getPacman().getPosition().down());
+					level.getPacman().setPosition(level.getPacman().getPosition().down());
 				break;
-
+			case LEFT:
+				if (level.getGameMap().isAvailable(level.getPacman().getPosition().left()))
+					level.getPacman().setPosition(level.getPacman().getPosition().left());
+				break;
+			case QUIT:
+				closeGame();
+			default:
+				break;
 		}
 	}
 
@@ -54,8 +54,7 @@ public class GameRules {
 	
 	private void moveGhost(Ghost ghost) {
 		if (!level.getGameMap().isAvailable(ghost.getNext()) ) {
-			ghost.invertDx();
-			ghost.invertDy();
+			ghost.invert();
 		}
 		
 		ghost.moveNext();

@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 
 public class PlayerInputHandler {
 
-    private PlayerInput getPlayerInput() {
+    public PlayerInput getPlayerInput() {
         PlayerInput input = currentInput;
         resetPlayerInput();
         return input;
@@ -44,7 +44,6 @@ public class PlayerInputHandler {
                     case 'q':
                         setPlayerInput(PlayerInput.QUIT);
                         break;
-
                     case 'w':
                         setPlayerInput(PlayerInput.UP);
                         break;

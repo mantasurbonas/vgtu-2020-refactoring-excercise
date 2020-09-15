@@ -2,31 +2,19 @@ package pacman;
 
 public class Ghost{
 	Position position;
+	Delta delta;
 	
-	int ghostDx = -1;
-	int ghostDy = 0;
-	
-	public Ghost(Position position, int dx, int dy) {
+	public Ghost(Position position, Delta delta) {
 		this.position = position;
-		this.ghostDx = dx;
-		this.ghostDy = dy;
-	}
-
-	public boolean at(int x, int y) {
-		return position.getY() == y && position.getX() == x;
+		this.delta = delta;
 	}
 
 	public void moveNext() {
-		position.setX(ghostDx + position.getX());
-		position.setY(ghostDy + position.getY());
+		position.apply(delta);
 	}
 
-	public void invertDx() {
-		ghostDx = -1 * ghostDx;		
-	}
-
-	public void invertDy() {
-		ghostDy = -1 * ghostDy;		
+	public void invert() {
+		delta.invert();
 	}
 
 	public Position getPosition() {
@@ -34,6 +22,6 @@ public class Ghost{
 	}
 
 	public Position getNext() {
-		return new Position(position).addX(ghostDx).addY(ghostDy);
+		return position.next(delta);
 	}
-};
+}
