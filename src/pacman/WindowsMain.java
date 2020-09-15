@@ -16,13 +16,15 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
-public class WindowsMain extends JFrame{
+public class WindowsMain extends JFrame {
 
-	private GameLevel level;
-	private GameRules gameRules;
-	private Renderer renderer;
+	private final GameLevel level;
+	private final GameRules gameRules;
+	private final Renderer renderer;
+	private final PlayerInputHandler playerInputHandler;
 
 	public WindowsMain() throws IOException {
+
 		super.setPreferredSize(new Dimension(1500, 900));
 		super.pack();
 		super.setVisible(true);
@@ -33,29 +35,13 @@ public class WindowsMain extends JFrame{
 		List<Ghost> ghosts = new ArrayList<>();
 			ghosts.add(new Ghost( new Position(15, 13),  -1, 0));
 			ghosts.add(new Ghost( new Position(17, 10),  0,  1));
-			
-		this.level = new GameLevel(map, pacman, ghosts);
-		
-		this.gameRules = new GameRules(level);
 
+		this.playerInputHandler = new PlayerInputHandler(this);
+		this.level = new GameLevel(map, pacman, ghosts);
+		this.gameRules = new GameRules(level);
 		this.renderer = new WindowsRenderer();
 		
-		super.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {}			
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				char command = e.getKeyChar();
-				repaint();
-				
-				gameRules.processUserInput(command);
-			}
-		});
+
 		
 		new Timer(300, e -> {
 			repaint();

@@ -21,6 +21,9 @@ public class GameRules {
 
 	public void processUserInput(int key) {
 		switch (key) {
+			case 'q':
+				closeGame();
+				break;
 			case 'a':
 				if (level.getGameMap().isAvailable(level.getPacman().getPosition().left()))
 					level.getPacman().setPosition( level.getPacman().getPosition().left());
@@ -37,9 +40,7 @@ public class GameRules {
 				if (level.getGameMap().isAvailable(level.getPacman().getPosition().down()))
 					level.getPacman().setPosition( level.getPacman().getPosition().down());
 				break;
-			case 'q':
-				closeGame();
-				break;
+
 		}
 	}
 
