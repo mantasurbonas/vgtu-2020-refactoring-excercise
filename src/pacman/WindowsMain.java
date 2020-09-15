@@ -13,58 +13,56 @@ import javax.swing.WindowConstants;
 
 public class WindowsMain extends JFrame {
 
-	private final GameLevel level;
-	private final GameRules gameRules;
-	private final Renderer renderer;
-	private final PlayerInputHandler playerInputHandler;
+    private final GameLevel level;
+    private final GameRules gameRules;
+    private final Renderer renderer;
+    private final PlayerInputHandler playerInputHandler;
 
-	public WindowsMain() throws IOException {
+    public WindowsMain() throws IOException {
 
-		super.setPreferredSize(new Dimension(1500, 900));
-		super.pack();
-		super.setVisible(true);
-		super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		super.createBufferStrategy(2);
-		
-		GameMap map = new GameMap();
-		Pacman pacman = new Pacman( new Position(10,10) );
-		List<Ghost> ghosts = new ArrayList<>();
-			ghosts.add(new Ghost( new Position(15, 13),  new Delta(-1, 0)));
-			ghosts.add(new Ghost( new Position(17, 10),  new Delta(0,  1)));
+        super.setPreferredSize(new Dimension(1500, 900));
+        super.pack();
+        super.setVisible(true);
+        super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        super.createBufferStrategy(2);
 
-		this.playerInputHandler = new PlayerInputHandler(this);
-		this.level = new GameLevel(map, pacman, ghosts);
-		this.gameRules = new GameRules(level);
-		this.renderer = new WindowsRenderer();
+        GameMap map = new GameMap();
+        Pacman pacman = new Pacman(new Position(10, 10));
+        List<Ghost> ghosts = new ArrayList<>();
+        ghosts.add(new Ghost(new Position(15, 13), new Delta(-1, 0)));
+        ghosts.add(new Ghost(new Position(17, 10), new Delta(0, 1)));
 
-		new Timer(33, e -> {
-			PlayerInput playerInput = this.playerInputHandler.getPlayerInput();
-			if(playerInput != PlayerInput.NONE)
-				repaint();
-			gameRules.processUserInput(playerInput);
-		}).start();
+        this.playerInputHandler = new PlayerInputHandler(this);
+        this.level = new GameLevel(map, pacman, ghosts);
+        this.gameRules = new GameRules(level);
+        this.renderer = new WindowsRenderer();
 
-		new Timer(300, e -> {
-			repaint();
-			gameRules.moveGhosts();
-		}).start();
-	}
-	
-	@Override
-	public void paint(Graphics graphics) {
-		super.paint(graphics);
-		this.renderer.render(graphics, this.level);
-	}
-	
-	public static void main(String[] args) throws Exception {
-		SwingUtilities.invokeAndWait(() -> {
-			try {
-				new WindowsMain();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-	}
+        new Timer(33, e -> {
+            PlayerInput playerInput = this.playerInputHandler.getPlayerInput();
+            if (playerInput != PlayerInput.NONE)
+                repaint();
+            gameRules.processUserInput(playerInput);
+        }).start();
 
-	private static final long serialVersionUID = 1L;
+        new Timer(300, e -> {
+            repaint();
+            gameRules.moveGhosts();
+        }).start();
+    }
+
+    @Override
+    public void paint(Graphics graphics) {
+        super.paint(graphics);
+        this.renderer.render(graphics, this.level);
+    }
+
+    public static void main(String[] args) throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                new WindowsMain();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
 }

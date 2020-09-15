@@ -13,7 +13,7 @@ public class PlayerInputHandler {
     }
 
     private void setPlayerInput(PlayerInput input) {
-        if(currentInput.getPriority() <= input.getPriority()) {
+        if (currentInput.getPriority() <= input.getPriority()) {
             currentInput = input;
         }
     }
@@ -60,5 +60,6 @@ public class PlayerInputHandler {
             }
         });
     }
+
     private PlayerInput currentInput = PlayerInput.NONE;
 }

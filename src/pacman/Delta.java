@@ -14,9 +14,13 @@ public class Delta {
         this.dy = delta.dy;
     }
 
-    public void invertX() { this.setDX(-1 * this.getDX()); }
+    public void invertX() {
+        this.setDX(-1 * this.getDX());
+    }
 
-    public void invertY() { this.setDY(-1 * this.getDY()); }
+    public void invertY() {
+        this.setDY(-1 * this.getDY());
+    }
 
     public void invert() {
         invertX();

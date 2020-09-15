@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class Sprite {
-    private BufferedImage image;
+    private final BufferedImage image;
 
     public Sprite(String path) throws IOException {
         this.image = ImageIO.read(new FileInputStream(path));
