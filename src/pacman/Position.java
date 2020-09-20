@@ -61,7 +61,4 @@ public class Position {
 		return this;
 	}
 
-	public boolean at(int x2, int y2) {
-		return this.x == x2 && this.y == y2;
-	}
 }
