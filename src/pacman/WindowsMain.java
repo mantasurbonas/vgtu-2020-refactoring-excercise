@@ -1,7 +1,6 @@
 package pacman;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -13,75 +12,80 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
-public class WindowsMain extends JFrame{
+public class WindowsMain extends JFrame {
 
-	private final GameLevel level;
-	private final GameRules gameRules;
-	private final WindowsRenderer windowsRenderer;
+    private final GameLevel level;
+    private final GameRules gameRules;
+    private GetKeyboardInput getKeyboardInput;
+    private final WindowsRenderer windowsRenderer;
 
-	public WindowsMain() throws IOException {
-		super.setPreferredSize(new Dimension(1600, 700));
-		super.pack();
-		super.setVisible(true);
-		super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    public WindowsMain() throws IOException {
+        super.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
+        super.pack();
+        super.setVisible(true);
+        super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		GameMap map = new GameMap();
-		Pacman pacman = new Pacman( new Position(10,10) );
-		List<Ghost> ghosts = new ArrayList<Ghost>();
-			ghosts.add(new Ghost( new Position(15, 13),  -1, 0));
-			ghosts.add(new Ghost( new Position(17, 10),  0,  1));
+        GameMap map = new GameMap();
+        Pacman pacman = new Pacman(new Position(10, 10));
+        List<Ghost> ghosts = new ArrayList<Ghost>();
+        ghosts.add(new Ghost(new Position(15, 13), -1, 0));
+        ghosts.add(new Ghost(new Position(17, 10), 0, 1));
 
-		this.level = new GameLevel(map, pacman, ghosts);
+        this.level = new GameLevel(map, pacman, ghosts);
 
-		this.gameRules = new GameRules(level);
+        this.gameRules = new GameRules(level);
 
-		this.windowsRenderer = new WindowsRenderer();
+        this.getKeyboardInput = new GetKeyboardInput(level);
 
-		super.addKeyListener(new KeyListener() {
+        this.windowsRenderer = new WindowsRenderer();
 
-			@Override
-			public void keyTyped(KeyEvent e) {}
+        super.addKeyListener(new KeyListener() {
 
-			@Override
-			public void keyReleased(KeyEvent e) {}
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
 
-			@Override
-			public void keyPressed(KeyEvent e) {
-				char command = e.getKeyChar();
-				repaint();
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
 
-				gameRules.processUserInput(command);
-			}
-		});
+            @Override
+            public void keyPressed(KeyEvent e) {
+                char command = e.getKeyChar();
+                repaint();
 
-		Timer timer = new Timer(300, eventListener -> {
-			repaint();
+                getKeyboardInput.processUserInput(command);
+            }
+        });
 
-			if(gameRules.isPacmanEaten())
-				System.exit(0);
+        Timer timer = new Timer(300, eventListener -> {
+            repaint();
 
-			gameRules.moveGhosts();
-		});
-		timer.start();
-	}
+            if (gameRules.isPacmanEaten())
+                System.exit(0);
 
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		
-		this.windowsRenderer.render(g, this.level);
-	}
-	
-	public static void main(String[] args) throws Exception {
-		SwingUtilities.invokeAndWait(() -> {
-			try {
-				new WindowsMain();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-	}
-	
-	private static final long serialVersionUID = 1L;
+            gameRules.moveGhosts();
+        });
+        timer.start();
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+
+        this.windowsRenderer.render(g, this.level);
+    }
+
+    public static void main(String[] args) throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                new WindowsMain();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private static final long serialVersionUID = 1L;
 
 }
