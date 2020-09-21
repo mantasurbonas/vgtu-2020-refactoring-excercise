@@ -2,6 +2,7 @@ package pacman;
 
 public class GameRules {
 
+	//TODO
 	private GameLevel level;
 
 	private boolean gameOver =false;
@@ -18,6 +19,7 @@ public class GameRules {
 	}
 	
 	public static boolean isPacmanEaten(Ghost ghost, Pacman pacman) {
+		//TODO
 		return ghost.getPosition().equals(pacman.getPosition());
 	}
 
@@ -47,6 +49,7 @@ public class GameRules {
 
 	public void moveGhosts() {
 		for (Ghost ghost: level.getGhosts())
+			//TODO
 			moveGhost(ghost);
 		
 		if (isPacmanEaten())
